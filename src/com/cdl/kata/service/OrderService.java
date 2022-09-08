@@ -91,7 +91,7 @@ public class OrderService {
 
         order.getItemsMap().forEach((item, qty) -> orderTotal.updateAndGet(d -> d + (item.getPrice() * qty)));
         order.getOffersMap().forEach((offer, qty) -> orderTotal.updateAndGet(d -> d + (offer.getPrice() * qty)));
-        return orderTotal.get() / 100;
+        return orderTotal.get() > 0 ? orderTotal.get() / 100 : 0;
     }
 
     /**
@@ -102,10 +102,10 @@ public class OrderService {
     public static void printOrderDetails(Order order) {
 
         order.getItemsMap().forEach((item, qty) -> {
-            System.out.println(item.getName() + " x " + qty + " = £ " + (item.getPrice() * qty) / 100);
+            System.out.println(item.getName() + " x " + qty + " = £ " + (item.getPrice() > 0 && qty > 0 ? ((item.getPrice() * qty) / 100) : 0));
         });
         order.getOffersMap().forEach((offer, qty) -> {
-            System.out.println(offer.getName() + " x " + qty + " = £ " + (offer.getPrice() * qty) / 100);
+            System.out.println(offer.getName() + " x " + qty + " = £ " + (offer.getPrice() > 0 && qty > 0 ? ((offer.getPrice() * qty) / 100) : 0));
         });
         System.out.println("Order Total = £ " + getOrderTotal(order));
     }
